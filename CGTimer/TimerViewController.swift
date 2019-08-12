@@ -13,6 +13,10 @@ class TimerViewController: UIViewController {
   var timerView:TimerView!
   var constraints = [NSLayoutConstraint]()
   
+  override var preferredStatusBarStyle: UIStatusBarStyle{
+    return UIStatusBarStyle.lightContent
+  }
+  
   override func loadView() {
     timerView = TimerView(frame: .zero)
     self.view = timerView
@@ -23,6 +27,7 @@ class TimerViewController: UIViewController {
     super.viewDidLoad()
     // Do any additional setup after loading the view.
     bindConstaints()
+    //self.preferredStatusBarStyle = .light
     timerView.backgroundColor = Constants.Colors.background
   }
   

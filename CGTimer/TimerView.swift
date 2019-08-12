@@ -33,8 +33,8 @@ class TimerView : UIView{
     
     let center = self.center
     let working = sqrt(pow(position.x - center.x,2) + pow(position.y - center.y,2))
-    
-    return min(self.frame.width/2, CGFloat(working))//truncate
+    let maxWidth = self.frame.width/2 - (Constants.Widths.main / 2)
+    return min(maxWidth, CGFloat(working))//truncate
   }
   
   var currentPosition:CGRect{

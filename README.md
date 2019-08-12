@@ -17,6 +17,7 @@
 * Custom Font
 
 * Background modes
+* Screen rotate handling
 
 * Access levels
 
