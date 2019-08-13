@@ -42,6 +42,11 @@ class TimerView : UIView{
     return self.convert(timerCircle.frame, to: self)
   }
   
+  //MARK: Subviews
+  
+  private var timerLabel:UILabel!
+  private var viewConstraints = [NSLayoutConstraint]()
+  
   override init(frame: CGRect) {
     timerCircle = CAShapeLayer()
     
@@ -49,13 +54,31 @@ class TimerView : UIView{
     self.layer.addSublayer(timerCircle)
     position = self.center
     setupShapeLayer()
+    setupLabel()
   }
   
   required init?(coder aDecoder: NSCoder) {
     fatalError("init(coder:) has not been implemented")
   }
   
-  func setupShapeLayer(){
+  private func setupLabel(){
+    
+    timerLabel = UILabel()
+    timerLabel.translatesAutoresizingMaskIntoConstraints = false
+    timerLabel.textColor = UIColor.white
+    timerLabel.numberOfLines = 1
+    timerLabel.textAlignment = .center
+    self.addSubview(timerLabel)
+    timerLabel.isUserInteractionEnabled = false
+    setTimerLabel(str: "initialised")
+  }
+  
+  public func setTimerLabel(str:String){
+    timerLabel.text = str
+    //timerLabel.sizeToFit()
+  }
+  
+  private func setupShapeLayer(){
     let rect = CGRect(origin: .zero, size: CGSize(width: 100, height: 100))
     let path = UIBezierPath(ovalIn: rect)
     timerCircle.bounds = rect
@@ -89,11 +112,29 @@ class TimerView : UIView{
     
   }
   
-  override func layoutSubviews() {
+  override func updateConstraints() {
     
-    //timerCircle.position = position
+    if viewConstraints.isEmpty{
+      
+      viewConstraints += [
+        timerLabel.centerXAnchor.constraint(equalTo: self.centerXAnchor),
+        timerLabel.leftAnchor.constraint(equalToSystemSpacingAfter: self.leftAnchor, multiplier: 1.0),
+        self.rightAnchor.constraint(equalToSystemSpacingAfter: timerLabel.rightAnchor, multiplier: 1.0),
+        self.safeAreaLayoutGuide.bottomAnchor.constraint(equalToSystemSpacingBelow: timerLabel.bottomAnchor, multiplier: 1.0)
+      ]
+      
+      NSLayoutConstraint.activate(viewConstraints)
+      
+    }
     
-    
+    super.updateConstraints()
   }
+  
+//  override func layoutSubviews() {
+//
+//    //timerCircle.position = position
+//
+//
+//  }
   
 }

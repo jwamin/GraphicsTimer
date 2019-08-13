@@ -10,6 +10,8 @@ import UIKit
 
 class TimerViewController: UIViewController {
 
+  var timerModel:TimerModel!
+  
   var timerView:TimerView!
   var constraints = [NSLayoutConstraint]()
   
@@ -29,6 +31,11 @@ class TimerViewController: UIViewController {
     bindConstaints()
     //self.preferredStatusBarStyle = .light
     timerView.backgroundColor = Constants.Colors.background
+    
+    timerModel.startResume()
+    //Thread.sleep(until: Date().addingTimeInterval(5))
+    
+    
   }
   
   func bindConstaints(){
@@ -50,6 +57,7 @@ class TimerViewController: UIViewController {
   
   
   override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+    timerModel.stopReset()
     if let first = touches.first, let _ = intersects(touch: first) {
       timerView.toggleFill(false)
     }
@@ -78,6 +86,14 @@ class TimerViewController: UIViewController {
       timerView.position = timerView.center
     }
     
+  }
+  
+}
+
+extension TimerViewController : TimerModelDelegate{
+  
+  func timerUpdated(timerString: String) {
+    timerView.setTimerLabel(str: timerString)
   }
   
 }
