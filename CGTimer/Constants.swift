@@ -19,4 +19,8 @@ public struct Constants {
     public static let main:CGFloat = 2
   }
   
+  public struct Dimensions{
+    public static let handleDimension:CGFloat = 50
+  }
+  
 }

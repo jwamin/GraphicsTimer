@@ -57,8 +57,9 @@ class TimerViewController: UIViewController {
   
   
   override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-    timerModel.stopReset()
+    
     if let first = touches.first, let _ = intersects(touch: first) {
+      timerModel.stopReset()
       timerView.toggleFill(false)
     }
   }
@@ -74,11 +75,19 @@ class TimerViewController: UIViewController {
   override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
     if let first = touches.first, let location = intersects(touch: first) {
       self.timerView.position = location
+      let fraction = Double(timerView.absoluteRadius / (self.view.frame.width / 2))
+      print(fraction)
+      timerModel.duration =  fraction * TimerModel.timerMax
     }
   }
   
   override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
     timerView.toggleFill(true)
+    if let first = touches.first, let location = intersects(touch: first) {
+      
+      timerModel.startResume()
+    }
+    
   }
 
   override func viewDidLayoutSubviews() {

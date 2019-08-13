@@ -17,8 +17,14 @@ protocol TimerModelDelegate{
 
 class TimerModel {
   
+    static let timerMax:TimeInterval = 60 * 15 // 15 Mins
+  
   var timer:Timer?
-  var duration:TimeInterval = 60 * 2 // 2 mins (default)
+  var duration:TimeInterval = 60 * 2 { // 2 mins (default)
+    didSet{
+      delegate?.timerUpdated(timerString: TimerModel.stringFromTimeInterval(interval: duration))
+    }
+  }
   public private(set) var remaining:TimeInterval?
   private var endDate:Date?
   var pausedAt:Date?
@@ -83,7 +89,7 @@ class TimerModel {
     delegate?.timerUpdated(timerString: str)
   }
   
-  static let timerMax = 60 * 15 // 15 Mins
+
   
   
 }

@@ -29,12 +29,21 @@ class TimerView : UIView{
     }
   }
   
-  var radius:CGFloat{
-    
+  //absolute radius ... used for calculating the... timers?
+  var absoluteRadius:CGFloat{
     let center = self.center
-    let working = sqrt(pow(position.x - center.x,2) + pow(position.y - center.y,2))
+    let radius = sqrt(pow(position.x - center.x,2) + pow(position.y - center.y,2))
+    let maxWidth = self.frame.width/2
+    return min(radius,maxWidth)
+  }
+  
+  //radius for drawing
+  var graphicalRadius:CGFloat{
+    
+    let working = absoluteRadius
     let maxWidth = self.frame.width/2 - (Constants.Widths.main / 2)
     return min(maxWidth, CGFloat(working))//truncate
+    
   }
   
   var currentPosition:CGRect{
@@ -79,7 +88,8 @@ class TimerView : UIView{
   }
   
   private func setupShapeLayer(){
-    let rect = CGRect(origin: .zero, size: CGSize(width: 100, height: 100))
+    let dimension = Constants.Dimensions.handleDimension
+    let rect = CGRect(origin: .zero, size: CGSize(width: dimension, height: dimension))
     let path = UIBezierPath(ovalIn: rect)
     timerCircle.bounds = rect
     
@@ -107,7 +117,7 @@ class TimerView : UIView{
     context?.setStrokeColor(UIColor.blue.cgColor)
     context?.setLineWidth(Constants.Widths.main)
     context?.beginPath()
-    context?.addArc(center: self.center, radius: radius, startAngle: 0, endAngle: 2 * .pi, clockwise: true)
+    context?.addArc(center: self.center, radius: graphicalRadius, startAngle: 0, endAngle: 2 * .pi, clockwise: true)
     context?.strokePath()
     
   }
