@@ -2,6 +2,12 @@
 
 ## CoreGraphics Timer with CADisplayLink
 
+### Done
+* Basic Graphics
+* Timer
+* Timer Label
+* Hooked up timer to handle
+
 ### TODO
 
 * hide handle on drop
@@ -12,7 +18,7 @@
 * tap on circle to pause 
 
 * Timer model with CADisplayLink
-* Timer Label
+
 * Sound Effects (Garageband?)
 * Custom Font
 
