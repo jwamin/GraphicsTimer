@@ -11,11 +11,23 @@
 		570B7D9B23020A710008741C /* FeatureBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 570B7D9A23020A710008741C /* FeatureBuilder.swift */; };
 		570B7D9D23020C9E0008741C /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 570B7D9C23020C9E0008741C /* Constants.swift */; };
 		576280EF23034E9B003E6BF6 /* TimerModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 576280EE23034E9B003E6BF6 /* TimerModel.swift */; };
+		576280F92305973A003E6BF6 /* CGTimerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 576280F82305973A003E6BF6 /* CGTimerTests.swift */; };
+		576281002305973E003E6BF6 /* TimerModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 576280F023059709003E6BF6 /* TimerModelTests.swift */; };
 		57C104312301F32600B5211D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57C104302301F32600B5211D /* AppDelegate.swift */; };
 		57C104332301F32600B5211D /* TimerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57C104322301F32600B5211D /* TimerViewController.swift */; };
 		57C104382301F32900B5211D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 57C104372301F32900B5211D /* Assets.xcassets */; };
 		57C1043B2301F32900B5211D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 57C104392301F32900B5211D /* LaunchScreen.storyboard */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		576280FB2305973A003E6BF6 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 57C104252301F32600B5211D /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 57C1042C2301F32600B5211D;
+			remoteInfo = CGTimer;
+		};
+/* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		570B7D9823020A410008741C /* TimerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerView.swift; sourceTree = "<group>"; };
@@ -23,6 +35,10 @@
 		570B7D9C23020C9E0008741C /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		570B7D9E23020EE40008741C /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		576280EE23034E9B003E6BF6 /* TimerModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerModel.swift; sourceTree = "<group>"; };
+		576280F023059709003E6BF6 /* TimerModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerModelTests.swift; sourceTree = "<group>"; };
+		576280F62305973A003E6BF6 /* CGTimerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CGTimerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		576280F82305973A003E6BF6 /* CGTimerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CGTimerTests.swift; sourceTree = "<group>"; };
+		576280FA2305973A003E6BF6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		57C1042D2301F32600B5211D /* CGTimer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CGTimer.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		57C104302301F32600B5211D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		57C104322301F32600B5211D /* TimerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerViewController.swift; sourceTree = "<group>"; };
@@ -32,6 +48,13 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		576280F32305973A003E6BF6 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		57C1042A2301F32600B5211D /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -42,11 +65,22 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		576280F72305973A003E6BF6 /* CGTimerTests */ = {
+			isa = PBXGroup;
+			children = (
+				576280F023059709003E6BF6 /* TimerModelTests.swift */,
+				576280F82305973A003E6BF6 /* CGTimerTests.swift */,
+				576280FA2305973A003E6BF6 /* Info.plist */,
+			);
+			path = CGTimerTests;
+			sourceTree = "<group>";
+		};
 		57C104242301F32600B5211D = {
 			isa = PBXGroup;
 			children = (
 				570B7D9E23020EE40008741C /* README.md */,
 				57C1042F2301F32600B5211D /* CGTimer */,
+				576280F72305973A003E6BF6 /* CGTimerTests */,
 				57C1042E2301F32600B5211D /* Products */,
 			);
 			sourceTree = "<group>";
@@ -55,6 +89,7 @@
 			isa = PBXGroup;
 			children = (
 				57C1042D2301F32600B5211D /* CGTimer.app */,
+				576280F62305973A003E6BF6 /* CGTimerTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -78,6 +113,24 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		576280F52305973A003E6BF6 /* CGTimerTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 576280FD2305973A003E6BF6 /* Build configuration list for PBXNativeTarget "CGTimerTests" */;
+			buildPhases = (
+				576280F22305973A003E6BF6 /* Sources */,
+				576280F32305973A003E6BF6 /* Frameworks */,
+				576280F42305973A003E6BF6 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				576280FC2305973A003E6BF6 /* PBXTargetDependency */,
+			);
+			name = CGTimerTests;
+			productName = CGTimerTests;
+			productReference = 576280F62305973A003E6BF6 /* CGTimerTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 		57C1042C2301F32600B5211D /* CGTimer */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 57C1043F2301F32900B5211D /* Build configuration list for PBXNativeTarget "CGTimer" */;
@@ -101,10 +154,14 @@
 		57C104252301F32600B5211D /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftUpdateCheck = 1030;
+				LastSwiftUpdateCheck = 1100;
 				LastUpgradeCheck = 1030;
 				ORGANIZATIONNAME = "Joss Manger";
 				TargetAttributes = {
+					576280F52305973A003E6BF6 = {
+						CreatedOnToolsVersion = 11.0;
+						TestTargetID = 57C1042C2301F32600B5211D;
+					};
 					57C1042C2301F32600B5211D = {
 						CreatedOnToolsVersion = 10.3;
 					};
@@ -124,11 +181,19 @@
 			projectRoot = "";
 			targets = (
 				57C1042C2301F32600B5211D /* CGTimer */,
+				576280F52305973A003E6BF6 /* CGTimerTests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		576280F42305973A003E6BF6 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		57C1042B2301F32600B5211D /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -141,6 +206,15 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		576280F22305973A003E6BF6 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				576280F92305973A003E6BF6 /* CGTimerTests.swift in Sources */,
+				576281002305973E003E6BF6 /* TimerModelTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		57C104292301F32600B5211D /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -156,6 +230,14 @@
 		};
 /* End PBXSourcesBuildPhase section */
 
+/* Begin PBXTargetDependency section */
+		576280FC2305973A003E6BF6 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 57C1042C2301F32600B5211D /* CGTimer */;
+			targetProxy = 576280FB2305973A003E6BF6 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
 /* Begin PBXVariantGroup section */
 		57C104392301F32900B5211D /* LaunchScreen.storyboard */ = {
 			isa = PBXVariantGroup;
@@ -168,6 +250,48 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		576280FE2305973A003E6BF6 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 3C42F7N9CQ;
+				INFOPLIST_FILE = CGTimerTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = co.jossy.CGTimerTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/CGTimer.app/CGTimer";
+			};
+			name = Debug;
+		};
+		576280FF2305973A003E6BF6 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 3C42F7N9CQ;
+				INFOPLIST_FILE = CGTimerTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = co.jossy.CGTimerTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/CGTimer.app/CGTimer";
+			};
+			name = Release;
+		};
 		57C1043D2301F32900B5211D /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -323,6 +447,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		576280FD2305973A003E6BF6 /* Build configuration list for PBXNativeTarget "CGTimerTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				576280FE2305973A003E6BF6 /* Debug */,
+				576280FF2305973A003E6BF6 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		57C104282301F32600B5211D /* Build configuration list for PBXProject "CGTimer" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
