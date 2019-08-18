@@ -21,11 +21,39 @@ class TimerModelTests: XCTestCase {
   
   override func tearDown() {
     // Put teardown code here. This method is called after the invocation of each test method in the class.
+    model.timer?.invalidate()
+    model = nil
   }
   
-  func testExample() {
-    // This is an example of a functional test case.
-    // Use XCTAssert and related functions to verify your tests produce the correct results.
+  func testTimerStarts(){
+    model.setDuration(duration: 100)
+    model.startResume()
+    XCTAssert(model.timer!.isValid)
+  }
+  
+  func testTimerRestarts(){
+    
+    model.setDuration(duration: 100)
+    Thread.sleep(until: Date().advanced(by: 1))
+    model.stopReset()
+    model.startResume()
+    XCTAssert(model.timer!.isValid)
+    
+  }
+  
+  
+  func testTimerDurationSet(){
+    model.setDuration(duration: 100)
+    XCTAssert(model.duration == 100)
+  }
+  
+  func testTimerStopsandInvalidates(){
+    
+    model.startResume()
+    XCTAssert(model.timer!.isValid)
+    model.stopReset()
+    XCTAssert(!model.timer!.isValid)
+    
   }
   
   //    func testPerformanceExample() {

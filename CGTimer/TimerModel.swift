@@ -41,7 +41,8 @@ class TimerModel: TimerProtocol {
   var pausedAt:Date?
   
   public func setDuration(duration:Double){
-    
+    //do some additional checks here maybe?
+    self.duration = duration
   }
   
   func startResume(){
@@ -72,7 +73,7 @@ class TimerModel: TimerProtocol {
     pausedAt = Date()
   }
   
-  fileprivate func getFraction()->Double{
+  func getFraction()->Double{
     
     let totalFraction = duration / TimerModel.timerMax
     let divisor = remaining ?? 1
