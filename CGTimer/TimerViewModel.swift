@@ -32,6 +32,7 @@ class TimerViewModel: TimerProtocol {
   
   init(timerModel:TimerModel){
     self.timerModel = timerModel
+    timerModel.parent = self
     dateFormatter.calendar = Calendar.current
     dateFormatter.allowedUnits = [NSCalendar.Unit.minute, NSCalendar.Unit.second]
   }

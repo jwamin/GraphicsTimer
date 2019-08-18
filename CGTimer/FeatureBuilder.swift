@@ -17,8 +17,7 @@ class FeatureBuilder{
     
     timerModel = TimerModel()
     timerViewModel = TimerViewModel(timerModel: timerModel)
-    timerViewModel.timerModel = timerModel
-    timerModel.parent = timerViewModel
+    
   }
   
   func createMainViewController() -> TimerViewController{
