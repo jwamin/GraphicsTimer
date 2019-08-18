@@ -11,30 +11,57 @@ import UIKit
 class TimerView : UIView{
   
   //MARK: Instance Variables
-  var timerCircle:CAShapeLayer
+  var timerCircle:CAShapeLayer!
+  var fillCircle:CAShapeLayer!
   var fill = true
   
   var displayLink:CADisplayLink!
+  
+  //MARK: Animations
+  
+  var fillAnimation:(CAShapeLayer,CGFloat,CGPoint)->CAAnimation = { shape,radius,point in
+    
+    let animation = CABasicAnimation(keyPath: "path")
+    animation.fromValue = shape.path
+    let diameter = radius * 2
+    let center = CGPoint(x: shape.bounds.midX, y: shape.bounds.midY)
+    print(center,shape.anchorPoint)
+    let rect = CGRect(origin: .zero, size: CGSize(width: diameter, height: diameter))
+    let bpath = UIBezierPath(ovalIn: rect)
+    
+    animation.toValue = bpath.cgPath
+    animation.duration = 1.5
+    animation.isRemovedOnCompletion = false
+    animation.fillMode = .forwards
+    return animation
+    
+  }
+  
   
   //MARK: Computed Properties
   var position:CGPoint = .zero{
     didSet{
       if (updateRadiusRaw == nil){
-      CATransaction.begin()
-      
-      CATransaction.setDisableActions(true)
-      timerCircle.position = position
-      
-      CATransaction.commit()
-      
-      setNeedsDisplay()
+        updatePositionOfHandle()
       }
     }
   }
   
-  var updateRadiusRaw:CGFloat?
-  
-  
+  var updateRadiusRaw:CGFloat? {
+    didSet{
+      if updateRadiusRaw == nil && oldValue != nil{
+        print(oldValue!,self.center)
+        let diameter = graphicalRadius * 2
+        let rect = CGRect(origin: center, size: CGSize(width: diameter, height: diameter))
+        fillCircle.frame = rect
+        //fillCircle
+        
+        fillCircle.position = self.center
+        let anim = fillAnimation(fillCircle,graphicalRadius,self.center)
+        fillCircle.add(anim, forKey: "fillAnimation")
+      }
+    }
+  }
   
   //absolute radius ... used for calculating the... timers?
   var absoluteRadius:CGFloat{
@@ -73,14 +100,13 @@ class TimerView : UIView{
   //MARK: Instance Methods
   
   override init(frame: CGRect) {
-    timerCircle = CAShapeLayer()
+    
     super.init(frame: frame)
     displayLink = CADisplayLink(target: self, selector: #selector(displayLinkUpdate))
     displayLink.add(to: RunLoop.main, forMode: .default)
-    self.layer.addSublayer(timerCircle)
+
     position = self.center
-    setupShapeLayer()
-    setupLabel()
+
   }
   
   required init?(coder aDecoder: NSCoder) {
@@ -95,39 +121,77 @@ class TimerView : UIView{
   }
   
   public func setTimerLabel(str:String){
-    timerLabel.text = str
     
+    if let timerLabel = timerLabel{
+      timerLabel.text = str
+    }
   }
   
   public func updateCircle(decimal:Double){
+    
     updateRadiusRaw = CGFloat(decimal)
   }
   
-  private func setupLabel(){
+  private func updatePositionOfHandle(){
+    CATransaction.begin()
     
-    timerLabel = UILabel()
-    timerLabel.translatesAutoresizingMaskIntoConstraints = false
-    timerLabel.textColor = UIColor.white
-    timerLabel.numberOfLines = 1
-    timerLabel.textAlignment = .left
-    self.addSubview(timerLabel)
-    timerLabel.isUserInteractionEnabled = false
-    setTimerLabel(str: "00:00.000")
-    timerLabel.sizeToFit()
+    CATransaction.setDisableActions(true)
+    timerCircle.position = position
+    
+    CATransaction.commit()
+    
+    setNeedsDisplay()
   }
   
-  private func setupShapeLayer(){
-    let dimension = Constants.Dimensions.handleDimension
-    let rect = CGRect(origin: .zero, size: CGSize(width: dimension, height: dimension))
-    let path = UIBezierPath(ovalIn: rect)
-    timerCircle.bounds = rect
+  //MARK: Setup Subviews
+  
+  private func setupLabel(){
+    if timerLabel == nil {
+      timerLabel = UILabel()
+      timerLabel.translatesAutoresizingMaskIntoConstraints = false
+      timerLabel.textColor = UIColor.white
+      timerLabel.numberOfLines = 1
+      timerLabel.textAlignment = .left
+      self.addSubview(timerLabel)
+      timerLabel.isUserInteractionEnabled = false
+      setTimerLabel(str: "00:00.000")
+      timerLabel.sizeToFit()
+    }
+  }
+  
+  private func setupShapeLayers(){
     
-    //timerCircle.position = self.center
-    timerCircle.strokeColor = Constants.Colors.foreground.cgColor
-    timerCircle.fillColor = (fill) ? UIColor.white.cgColor : UIColor.clear.cgColor
-    timerCircle.lineWidth = Constants.Widths.main
-    timerCircle.lineJoin = .round
-    timerCircle.path = path.cgPath
+    if timerCircle == nil && fillCircle == nil {
+      
+      timerCircle = CAShapeLayer()
+      self.layer.addSublayer(timerCircle)
+      
+      let dimension = Constants.Dimensions.handleDimension
+      let rect = CGRect(origin: .zero, size: CGSize(width: dimension, height: dimension))
+      let path = UIBezierPath(ovalIn: rect)
+      timerCircle.bounds = rect
+      
+      //timerCircle.position = self.center
+      timerCircle.strokeColor = Constants.Colors.foreground.cgColor
+      timerCircle.fillColor = (fill) ? UIColor.white.cgColor : UIColor.clear.cgColor
+      timerCircle.lineWidth = Constants.Widths.main
+      timerCircle.lineJoin = .round
+      timerCircle.path = path.cgPath
+      timerCircle.zPosition = 1
+      
+      fillCircle = CAShapeLayer()
+      self.layer.addSublayer(fillCircle)
+      fillCircle.borderWidth = 1.0
+      fillCircle.borderColor = UIColor.green.cgColor
+      fillCircle.bounds = rect
+      //fillCircle.anchorPoint = CGPoint(x: 0.5,y: 0.5)
+      fillCircle.fillColor = Constants.Colors.foreground.cgColor
+      fillCircle.position = self.center
+      //fillCircle.backgroundColor = UIColor.white.cgColor
+      fillCircle.path = path.cgPath
+      fillCircle.zPosition = 0
+      
+    }
   }
   
   func toggleFill(_ override:Bool? = nil){
@@ -153,7 +217,7 @@ class TimerView : UIView{
   
   override func updateConstraints() {
     
-    if viewConstraints.isEmpty{
+    if viewConstraints.isEmpty && timerLabel != nil{
       
       viewConstraints += [
         timerLabel.centerXAnchor.constraint(equalTo: self.centerXAnchor),
@@ -163,17 +227,16 @@ class TimerView : UIView{
       ]
       
       NSLayoutConstraint.activate(viewConstraints)
-      
     }
     
     super.updateConstraints()
   }
   
-//  override func layoutSubviews() {
-//
-//    //timerCircle.position = position
-//
-//
-//  }
+  override func layoutSubviews() {
+    
+    setupShapeLayers()
+    setupLabel()
+    super.layoutSubviews()
+  }
   
 }

@@ -8,21 +8,6 @@
 
 import Foundation
 
-protocol TimerProtocol{
-  
-  func startResume()
-  func stopReset()
-  func pause()
-  
-}
-
-protocol TimerModelDelegate{
-  
-  func timerUpdated(timerString:String,updateFraction:Double?)
-  
-}
-
-
 class TimerModel: TimerProtocol {
   
   static let timerMax:TimeInterval = 60 * 1 // 1 Mins

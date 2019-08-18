@@ -79,7 +79,7 @@ class TimerViewController: UIViewController {
     if let first = touches.first, let location = intersects(touch: first) {
       self.timerView.position = location
       let fraction = Double(timerView.absoluteRadius / (self.view.frame.width / 2))
-      print(fraction,location)
+      //print(fraction,location)
       timerViewModel.setDuration(duration: fraction * TimerModel.timerMax)
     }
   }
