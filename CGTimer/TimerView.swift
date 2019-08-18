@@ -14,10 +14,12 @@ class TimerView : UIView{
   var timerCircle:CAShapeLayer
   var fill = true
   
+  var displayLink:CADisplayLink!
+  
   //MARK: Computed Properties
   var position:CGPoint = .zero{
     didSet{
-      
+      if (updateRadiusRaw == nil){
       CATransaction.begin()
       
       CATransaction.setDisableActions(true)
@@ -26,8 +28,13 @@ class TimerView : UIView{
       CATransaction.commit()
       
       setNeedsDisplay()
+      }
     }
   }
+  
+  var updateRadiusRaw:CGFloat?
+  
+  
   
   //absolute radius ... used for calculating the... timers?
   var absoluteRadius:CGFloat{
@@ -40,7 +47,14 @@ class TimerView : UIView{
   //radius for drawing
   var graphicalRadius:CGFloat{
     
-    let working = absoluteRadius
+    var working:CGFloat = 0
+    
+    if let updateRadius = updateRadiusRaw{
+      working = updateRadius * (self.frame.width / 2)
+    } else {
+      working = absoluteRadius
+    }
+    
     let maxWidth = self.frame.width/2 - (Constants.Widths.main / 2)
     return min(maxWidth, CGFloat(working))//truncate
     
@@ -56,10 +70,13 @@ class TimerView : UIView{
   private var timerLabel:UILabel!
   private var viewConstraints = [NSLayoutConstraint]()
   
+  //MARK: Instance Methods
+  
   override init(frame: CGRect) {
     timerCircle = CAShapeLayer()
-    
     super.init(frame: frame)
+    displayLink = CADisplayLink(target: self, selector: #selector(displayLinkUpdate))
+    displayLink.add(to: RunLoop.main, forMode: .default)
     self.layer.addSublayer(timerCircle)
     position = self.center
     setupShapeLayer()
@@ -70,21 +87,33 @@ class TimerView : UIView{
     fatalError("init(coder:) has not been implemented")
   }
   
+  @objc
+  func displayLinkUpdate(){
+    if !displayLink.isPaused{
+      self.setNeedsDisplay()
+    }
+  }
+  
+  public func setTimerLabel(str:String){
+    timerLabel.text = str
+    
+  }
+  
+  public func updateCircle(decimal:Double){
+    updateRadiusRaw = CGFloat(decimal)
+  }
+  
   private func setupLabel(){
     
     timerLabel = UILabel()
     timerLabel.translatesAutoresizingMaskIntoConstraints = false
     timerLabel.textColor = UIColor.white
     timerLabel.numberOfLines = 1
-    timerLabel.textAlignment = .center
+    timerLabel.textAlignment = .left
     self.addSubview(timerLabel)
     timerLabel.isUserInteractionEnabled = false
-    setTimerLabel(str: "initialised")
-  }
-  
-  public func setTimerLabel(str:String){
-    timerLabel.text = str
-    //timerLabel.sizeToFit()
+    setTimerLabel(str: "00:00.000")
+    timerLabel.sizeToFit()
   }
   
   private func setupShapeLayer(){
@@ -128,8 +157,8 @@ class TimerView : UIView{
       
       viewConstraints += [
         timerLabel.centerXAnchor.constraint(equalTo: self.centerXAnchor),
-        timerLabel.leftAnchor.constraint(equalToSystemSpacingAfter: self.leftAnchor, multiplier: 1.0),
-        self.rightAnchor.constraint(equalToSystemSpacingAfter: timerLabel.rightAnchor, multiplier: 1.0),
+        //timerLabel.leftAnchor.constraint(equalToSystemSpacingAfter: self.leftAnchor, multiplier: 1.0),
+        //self.rightAnchor.constraint(equalToSystemSpacingAfter: timerLabel.rightAnchor, multiplier: 1.0),
         self.safeAreaLayoutGuide.bottomAnchor.constraint(equalToSystemSpacingBelow: timerLabel.bottomAnchor, multiplier: 1.0)
       ]
       

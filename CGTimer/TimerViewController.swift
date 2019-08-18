@@ -60,6 +60,8 @@ class TimerViewController: UIViewController {
     
     if let first = touches.first, let _ = intersects(touch: first) {
       timerModel.stopReset()
+      timerView.displayLink.isPaused = false
+      timerView.updateRadiusRaw = nil
       timerView.toggleFill(false)
     }
   }
@@ -76,7 +78,7 @@ class TimerViewController: UIViewController {
     if let first = touches.first, let location = intersects(touch: first) {
       self.timerView.position = location
       let fraction = Double(timerView.absoluteRadius / (self.view.frame.width / 2))
-      print(fraction)
+      //print(fraction)
       timerModel.duration =  fraction * TimerModel.timerMax
     }
   }
@@ -84,7 +86,7 @@ class TimerViewController: UIViewController {
   override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
     timerView.toggleFill(true)
     if let first = touches.first, let location = intersects(touch: first) {
-      
+      timerView.displayLink.isPaused = false
       timerModel.startResume()
     }
     
@@ -101,8 +103,11 @@ class TimerViewController: UIViewController {
 
 extension TimerViewController : TimerModelDelegate{
   
-  func timerUpdated(timerString: String) {
+  func timerUpdated(timerString: String, updateFraction: Double?) {
+    print(updateFraction)
     timerView.setTimerLabel(str: timerString)
+    if let updateFraction = updateFraction{
+      timerView.updateCircle(decimal: updateFraction)
+    }
   }
-  
 }

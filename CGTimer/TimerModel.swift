@@ -10,19 +10,19 @@ import Foundation
 
 protocol TimerModelDelegate{
   
-  func timerUpdated(timerString:String)
+  func timerUpdated(timerString:String,updateFraction:Double?)
   
 }
 
 
 class TimerModel {
   
-    static let timerMax:TimeInterval = 60 * 15 // 15 Mins
+    static let timerMax:TimeInterval = 60 * 1 // 15 Mins
   
   var timer:Timer?
-  var duration:TimeInterval = 60 * 2 { // 2 mins (default)
+  var duration:TimeInterval = 60 * 0.5 { // 2 mins (default)
     didSet{
-      delegate?.timerUpdated(timerString: TimerModel.stringFromTimeInterval(interval: duration))
+      delegate?.timerUpdated(timerString: TimerModel.stringFromTimeInterval(interval: duration),updateFraction: nil)
     }
   }
   public private(set) var remaining:TimeInterval?
@@ -83,13 +83,26 @@ class TimerModel {
     pausedAt = Date()
   }
   
+  private func getFraction()->Double{
+    
+    let totalFraction = duration / TimerModel.timerMax
+    let divisor = remaining ?? 1
+    let innerFraction = divisor / duration
+    
+    return innerFraction * totalFraction
+    
+  }
+  
   private func update(_ timer:Timer)->Void{
     remaining = endDate!.timeIntervalSince(Date())
     let str = TimerModel.stringFromTimeInterval(interval: remaining!)
-    delegate?.timerUpdated(timerString: str)
+    delegate?.timerUpdated(timerString: str,updateFraction: getFraction())
   }
   
 
   
   
 }
+
+
+//create View Model
