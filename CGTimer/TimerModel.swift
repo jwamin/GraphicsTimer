@@ -8,6 +8,14 @@
 
 import Foundation
 
+protocol TimerProtocol{
+  
+  func startResume()
+  func stopReset()
+  func pause()
+  
+}
+
 protocol TimerModelDelegate{
   
   func timerUpdated(timerString:String,updateFraction:Double?)
@@ -15,41 +23,22 @@ protocol TimerModelDelegate{
 }
 
 
-class TimerModel {
+class TimerModel: TimerProtocol {
   
-    static let timerMax:TimeInterval = 60 * 1 // 15 Mins
+  static let timerMax:TimeInterval = 60 * 1 // 1 Mins
   
   var timer:Timer?
-  var duration:TimeInterval = 60 * 0.5 { // 2 mins (default)
+  weak var parent:TimerViewModel?
+  
+  var duration:TimeInterval = 60 * 0.5 { // 30 secs (default)
     didSet{
-      delegate?.timerUpdated(timerString: TimerModel.stringFromTimeInterval(interval: duration),updateFraction: nil)
+      parent?.reset()
     }
   }
+  
   public private(set) var remaining:TimeInterval?
   private var endDate:Date?
   var pausedAt:Date?
-  
-  var delegate:TimerModelDelegate?
-  
-  var dateFormatter = DateComponentsFormatter()
-  
-  init(){
-    dateFormatter.calendar = Calendar.current
-    dateFormatter.allowedUnits = [NSCalendar.Unit.minute, NSCalendar.Unit.second]
-  }
-  
-  static func stringFromTimeInterval(interval: TimeInterval) -> String {
-    
-    let ti = NSInteger(interval)
-    
-    let ms = Int((interval.truncatingRemainder(dividingBy: 1)) * 1000)
-    
-    let seconds = ti % 60
-    let minutes = (ti / 60) % 60
-    //let hours = (ti / 3600)
-    
-    return String(format: "%0.2d:%0.2d.%0.3d",minutes,seconds,ms)
-  }
   
   public func setDuration(duration:Double){
     
@@ -57,13 +46,13 @@ class TimerModel {
   
   func startResume(){
     
-    if let paused = pausedAt, let remaining = remaining{
-      endDate = pausedAt?.addingTimeInterval(remaining) //
+    if let _ = pausedAt, let remaining = remaining{
+      endDate = pausedAt!.addingTimeInterval(remaining) //
       pausedAt = nil
     } else {
       endDate = Date().addingTimeInterval(duration)
     }
-    print("hello from timer")
+ 
     timer = Timer(timeInterval: 0, repeats: true, block: self.update(_:))
     
     RunLoop.main.add(timer!, forMode: .default)
@@ -83,7 +72,7 @@ class TimerModel {
     pausedAt = Date()
   }
   
-  private func getFraction()->Double{
+  fileprivate func getFraction()->Double{
     
     let totalFraction = duration / TimerModel.timerMax
     let divisor = remaining ?? 1
@@ -95,14 +84,20 @@ class TimerModel {
   
   private func update(_ timer:Timer)->Void{
     remaining = endDate!.timeIntervalSince(Date())
-    let str = TimerModel.stringFromTimeInterval(interval: remaining!)
-    delegate?.timerUpdated(timerString: str,updateFraction: getFraction())
+    
+    if remaining! <= 0{
+      //timer is ended
+      parent?.update(remaining: 0)
+      stopReset()
+      return
+    }
+    
+    parent?.update(remaining: remaining!)
   }
   
-
+  deinit {
+    print("why am i being deallocated?")
+  }
   
   
 }
-
-
-//create View Model

@@ -10,7 +10,7 @@ import UIKit
 
 class TimerViewController: UIViewController {
 
-  var timerModel:TimerModel!
+  var timerViewModel:TimerViewModel!
   
   var timerView:TimerView!
   var constraints = [NSLayoutConstraint]()
@@ -32,7 +32,7 @@ class TimerViewController: UIViewController {
     //self.preferredStatusBarStyle = .light
     timerView.backgroundColor = Constants.Colors.background
     
-    timerModel.startResume()
+    timerViewModel.startResume()
     //Thread.sleep(until: Date().addingTimeInterval(5))
     
     
@@ -59,7 +59,8 @@ class TimerViewController: UIViewController {
   override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
     
     if let first = touches.first, let _ = intersects(touch: first) {
-      timerModel.stopReset()
+      print("valid began")
+      timerViewModel.stopReset()
       timerView.displayLink.isPaused = false
       timerView.updateRadiusRaw = nil
       timerView.toggleFill(false)
@@ -78,8 +79,8 @@ class TimerViewController: UIViewController {
     if let first = touches.first, let location = intersects(touch: first) {
       self.timerView.position = location
       let fraction = Double(timerView.absoluteRadius / (self.view.frame.width / 2))
-      //print(fraction)
-      timerModel.duration =  fraction * TimerModel.timerMax
+      print(fraction,location)
+      timerViewModel.setDuration(duration: fraction * TimerModel.timerMax)
     }
   }
   
@@ -87,7 +88,8 @@ class TimerViewController: UIViewController {
     timerView.toggleFill(true)
     if let first = touches.first, let location = intersects(touch: first) {
       timerView.displayLink.isPaused = false
-      timerModel.startResume()
+      print("valid ended")
+      timerViewModel.startResume()
     }
     
   }
@@ -104,7 +106,6 @@ class TimerViewController: UIViewController {
 extension TimerViewController : TimerModelDelegate{
   
   func timerUpdated(timerString: String, updateFraction: Double?) {
-    print(updateFraction)
     timerView.setTimerLabel(str: timerString)
     if let updateFraction = updateFraction{
       timerView.updateCircle(decimal: updateFraction)

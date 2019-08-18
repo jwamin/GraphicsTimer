@@ -11,16 +11,21 @@ import Foundation
 class FeatureBuilder{
   
   let timerModel:TimerModel
+  let timerViewModel:TimerViewModel
   
   init() {
+    
     timerModel = TimerModel()
+    timerViewModel = TimerViewModel(timerModel: timerModel)
+    timerViewModel.timerModel = timerModel
+    timerModel.parent = timerViewModel
   }
   
   func createMainViewController() -> TimerViewController{
     
     let timerViewController = TimerViewController(nibName: nil, bundle: nil)
-    timerViewController.timerModel = timerModel
-    timerModel.delegate = timerViewController
+    timerViewController.timerViewModel = timerViewModel
+    timerViewModel.delegate = timerViewController
     return timerViewController
   }
   
