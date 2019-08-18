@@ -40,6 +40,14 @@ class TimerModel: TimerProtocol {
   private var endDate:Date?
   var pausedAt:Date?
   
+  var isRunning:Bool{
+    return timer?.isValid ?? false
+  }
+  
+  var isPaused:Bool{
+    return (timer == nil) && pausedAt != nil
+  }
+  
   public func setDuration(duration:Double){
     //do some additional checks here maybe?
     self.duration = duration
@@ -73,6 +81,7 @@ class TimerModel: TimerProtocol {
     pausedAt = Date()
   }
   
+  /// Generates a normalised decimal for use by the graphical system 0.5 indicates halfway through the timer duration
   func getFraction()->Double{
     
     let totalFraction = duration / TimerModel.timerMax
@@ -83,11 +92,13 @@ class TimerModel: TimerProtocol {
     
   }
   
+  /// Update the parent with new data when the tiemr fires
+  /// - Parameter timer: timer instance passed in by firing of timer
   private func update(_ timer:Timer)->Void{
     remaining = endDate!.timeIntervalSince(Date())
     
     if remaining! <= 0{
-      //timer is ended
+      //timer is ended, call reset
       parent?.update(remaining: 0)
       stopReset()
       return
@@ -96,9 +107,7 @@ class TimerModel: TimerProtocol {
     parent?.update(remaining: remaining!)
   }
   
-  deinit {
-    print("why am i being deallocated?")
-  }
+
   
   
 }

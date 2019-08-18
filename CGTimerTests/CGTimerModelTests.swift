@@ -41,6 +41,12 @@ class TimerModelTests: XCTestCase {
     
   }
   
+  func testTimerPauses(){
+    model.pause()
+    XCTAssert(model.isPaused)
+    model.startResume()
+    XCTAssert(!model.isPaused, "model.isPaused \(model.isPaused)")
+  }
   
   func testTimerDurationSet(){
     model.setDuration(duration: 100)
