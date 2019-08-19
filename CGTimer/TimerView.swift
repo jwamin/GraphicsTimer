@@ -24,9 +24,11 @@ class TimerView : UIView{
     let animation = CABasicAnimation(keyPath: "path")
     animation.fromValue = shape.path
     let diameter = radius * 2
-    let center = CGPoint(x: shape.bounds.midX, y: shape.bounds.midY)
-    print(center,shape.anchorPoint)
-    let rect = CGRect(origin: .zero, size: CGSize(width: diameter, height: diameter))
+    let center = CGPoint(x: -diameter/2, y: -diameter/2)
+    
+    let origin = CGPoint(x: shape.bounds.origin.x, y: shape.bounds.origin.y)
+    print(center,origin,shape.anchorPoint)
+    let rect = CGRect(origin: center, size: CGSize(width: diameter, height: diameter))
     let bpath = UIBezierPath(ovalIn: rect)
     
     animation.toValue = bpath.cgPath
@@ -50,13 +52,15 @@ class TimerView : UIView{
   var updateRadiusRaw:CGFloat? {
     didSet{
       if updateRadiusRaw == nil && oldValue != nil{
-        print(oldValue!,self.center)
-        let diameter = graphicalRadius * 2
-        let rect = CGRect(origin: center, size: CGSize(width: diameter, height: diameter))
-        fillCircle.frame = rect
-        //fillCircle
-        
-        fillCircle.position = self.center
+//        print(oldValue!,self.center)
+        let radius = oldValue!
+         let diameter = graphicalRadius * 2
+        //let center = CGPoint(x: self.center.x - radius, y: self.center.y - radius)
+        //let rect = CGRect(origin: center, size: CGSize(width: diameter, height: diameter))
+        //fillCircle.frame = rect
+//        //fillCircle
+//
+//        fillCircle.position = self.center
         let anim = fillAnimation(fillCircle,graphicalRadius,self.center)
         fillCircle.add(anim, forKey: "fillAnimation")
       }
@@ -163,10 +167,12 @@ class TimerView : UIView{
     
     if timerCircle == nil && fillCircle == nil {
       
+      //setup timer circle, the "handle", replace this when just grabbing the circle
       timerCircle = CAShapeLayer()
       self.layer.addSublayer(timerCircle)
       
       let dimension = Constants.Dimensions.handleDimension
+      let position = CGPoint(x: dimension / 2, y: dimension / 2)
       let rect = CGRect(origin: .zero, size: CGSize(width: dimension, height: dimension))
       let path = UIBezierPath(ovalIn: rect)
       timerCircle.bounds = rect
@@ -179,16 +185,20 @@ class TimerView : UIView{
       timerCircle.path = path.cgPath
       timerCircle.zPosition = 1
       
+      let secondPosition = CGPoint(x: -dimension, y: -dimension)
+      var doubleRect = CGRect(origin: secondPosition, size: CGSize(width: dimension*2, height: dimension*2))
+      //setup fill circle, for pause animation
+      let secontPAth = UIBezierPath(ovalIn: doubleRect)
       fillCircle = CAShapeLayer()
       self.layer.addSublayer(fillCircle)
       fillCircle.borderWidth = 1.0
       fillCircle.borderColor = UIColor.green.cgColor
-      fillCircle.bounds = rect
-      //fillCircle.anchorPoint = CGPoint(x: 0.5,y: 0.5)
+      fillCircle.bounds = .zero
+      //fillCircle.anchorPoint = CGPoint(x: 1,y: 0.5)
       fillCircle.fillColor = Constants.Colors.foreground.cgColor
       fillCircle.position = self.center
       //fillCircle.backgroundColor = UIColor.white.cgColor
-      fillCircle.path = path.cgPath
+      fillCircle.path = secontPAth.cgPath
       fillCircle.zPosition = 0
       
     }
