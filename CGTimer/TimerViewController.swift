@@ -9,7 +9,7 @@
 import UIKit
 
 class TimerViewController: UIViewController {
-
+  
   var timerViewModel:TimerViewModel!
   
   var timerView:TimerView!
@@ -63,25 +63,24 @@ class TimerViewController: UIViewController {
   
   override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
     
-    if let first = touches.first, let _ = intersects(touch: first) {
+    if let first = touches.first, let _ = intersects(touch: first.location(in: timerView)) {
       print("valid began")
       timerViewModel.stopReset()
       timerView.displayLink.isPaused = false
-      timerView.updateRadiusRaw = nil
+      timerView.clearRawRadius()
       timerView.toggleFill(false)
     }
   }
   
-  private func intersects(touch:UITouch)->CGPoint?{
-    let firstLocation = touch.location(in: timerView)
-    if self.timerView.currentPosition.contains(firstLocation){
-      return firstLocation
+  private func intersects(touch:CGPoint)->CGPoint?{
+    if self.timerView.currentPosition.contains(touch){
+      return touch
     }
     return nil
   }
   
   override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
-    if let first = touches.first, let location = intersects(touch: first) {
+    if let first = touches.first, let location = intersects(touch: first.location(in: timerView)) {
       self.timerView.position = location
       let fraction = Double(timerView.absoluteRadius / (self.view.frame.width / 2))
       //print(fraction,location)
@@ -91,14 +90,14 @@ class TimerViewController: UIViewController {
   
   override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
     timerView.toggleFill(true)
-    if let first = touches.first, let location = intersects(touch: first) {
+    if let first = touches.first, let location = intersects(touch: first.location(in: timerView)) {
       timerView.displayLink.isPaused = false
       print("valid ended")
       timerViewModel.startResume()
     }
     
   }
-
+  
   override func viewDidLayoutSubviews() {
     if timerView.position == .zero{
       timerView.position = timerView.center
@@ -122,20 +121,33 @@ extension TimerViewController : TimerModelDelegate{
 extension TimerViewController : UIGestureRecognizerDelegate{
   
   func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
-    return true
+    switch gestureRecognizer{
+    case is UITapGestureRecognizer:
+      print("is tap gesture recogniser")
+      return intersects(touch: gestureRecognizer.location(in: timerView)) == nil
+    default:
+      return false
+    }
   }
   
   @objc func handleTap(_ sender:UITapGestureRecognizer){
     print("tap handled")
     
-   let tapInCircleRect = timerView.circleRect.contains(sender.location(in: timerView))
+    let tapInCircleRect = timerView.circleRect.contains(sender.location(in: timerView))
+    print(tapInCircleRect)
+    
     
     if tapInCircleRect{
-      timerViewModel.pause()
+      if timerViewModel.isPaused{
+        timerViewModel.startResume()
+      } else {
+        timerViewModel.pause()
+      }
       
+      timerView.setPaused(timerViewModel.isPaused)
     }
     
-    timerView.setPaused(timerViewModel.isPaused)
+    
     
   }
   

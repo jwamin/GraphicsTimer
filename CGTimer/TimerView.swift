@@ -17,27 +17,7 @@ class TimerView : UIView{
   
   var displayLink:CADisplayLink!
   
-  //MARK: Animations
-  
-  var fillAnimation:(CAShapeLayer,CGFloat,CGPoint)->CAAnimation = { shape,radius,point in
-    
-    let animation = CABasicAnimation(keyPath: "path")
-    animation.fromValue = shape.path
-    let diameter = radius * 2
-    let center = CGPoint(x: -diameter/2, y: -diameter/2)
-    
-    let origin = CGPoint(x: shape.bounds.origin.x, y: shape.bounds.origin.y)
-    print(center,origin,shape.anchorPoint)
-    let rect = CGRect(origin: center, size: CGSize(width: diameter, height: diameter))
-    let bpath = UIBezierPath(ovalIn: rect)
-    
-    animation.toValue = bpath.cgPath
-    animation.duration = 1.5
-    animation.isRemovedOnCompletion = false
-    animation.fillMode = .forwards
-    return animation
-    
-  }
+
   
   
   //MARK: Computed Properties
@@ -50,10 +30,11 @@ class TimerView : UIView{
   }
   
   
+  private var updateRadiusRaw:CGFloat?
   
-  var updateRadiusRaw:CGFloat?
-  
-
+  public func clearRawRadius(){
+    updateRadiusRaw = nil
+  }
   
   //absolute radius ... used for calculating the... timers?
   var absoluteRadius:CGFloat{
@@ -129,9 +110,13 @@ class TimerView : UIView{
   
   public func setPaused(_ paused:Bool){
     
-    let anim = fillAnimation(fillCircle,graphicalRadius,self.center)
-    
+    let (path,anim) = makeFillAnimation(paused:paused)
+    CATransaction.begin()
+    CATransaction.setCompletionBlock {
+      self.fillCircle.path = path
+    }
     fillCircle.add(anim, forKey: "fillAnimation")
+    CATransaction.commit()
     
   }
   
@@ -258,6 +243,28 @@ class TimerView : UIView{
     setupShapeLayers()
     setupLabel()
     super.layoutSubviews()
+  }
+  
+}
+
+//MARK: Animations
+extension TimerView {
+  
+  func makeFillAnimation(paused:Bool)->(CGPath,CAAnimation){
+    
+      let animation = CABasicAnimation(keyPath: "path")
+      animation.fromValue = fillCircle.path
+      let center = CGPoint(x: -diameter/2, y: -diameter/2)
+      let rect = (paused) ? CGRect(origin: center, size: CGSize(width: diameter, height: diameter)) : .zero
+      let bpath = UIBezierPath(ovalIn: rect)
+      
+      animation.toValue = bpath.cgPath
+      animation.duration = 1.5
+      animation.isRemovedOnCompletion = false
+      animation.fillMode = .forwards
+      
+    return (bpath.cgPath,animation)
+    
   }
   
 }

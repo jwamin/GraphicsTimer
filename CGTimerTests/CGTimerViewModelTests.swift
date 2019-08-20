@@ -26,6 +26,17 @@ class CGTimerViewModelTests: XCTestCase {
       viewModel = nil
     }
 
+  func testTimerPausedFlag(){
+    viewModel.startResume()
+    XCTAssert(viewModel.isPaused == false)
+    XCTAssert(timerModel.isPaused == viewModel.isPaused)
+    viewModel.pause()
+    XCTAssert(viewModel.isPaused == true)
+    viewModel.startResume()
+    XCTAssert(viewModel.isPaused == false)
+  }
+  
+  
     func testRemainingString() {
         // This is an example of a functional test case.
         // Use XCTAssert and related functions to verify your tests produce the correct results.

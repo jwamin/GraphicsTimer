@@ -30,7 +30,7 @@ class TimerModel: TimerProtocol {
   }
   
   var isPaused:Bool{
-    return (timer == nil) && pausedAt != nil
+    return pausedAt != nil && !timer!.isValid
   }
   
   public func setDuration(duration:Double){
