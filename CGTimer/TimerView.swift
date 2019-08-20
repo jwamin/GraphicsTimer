@@ -49,23 +49,11 @@ class TimerView : UIView{
     }
   }
   
-  var updateRadiusRaw:CGFloat? {
-    didSet{
-      if updateRadiusRaw == nil && oldValue != nil{
-//        print(oldValue!,self.center)
-        let radius = oldValue!
-         let diameter = graphicalRadius * 2
-        //let center = CGPoint(x: self.center.x - radius, y: self.center.y - radius)
-        //let rect = CGRect(origin: center, size: CGSize(width: diameter, height: diameter))
-        //fillCircle.frame = rect
-//        //fillCircle
-//
-//        fillCircle.position = self.center
-        let anim = fillAnimation(fillCircle,graphicalRadius,self.center)
-        fillCircle.add(anim, forKey: "fillAnimation")
-      }
-    }
-  }
+  
+  
+  var updateRadiusRaw:CGFloat?
+  
+
   
   //absolute radius ... used for calculating the... timers?
   var absoluteRadius:CGFloat{
@@ -122,6 +110,29 @@ class TimerView : UIView{
     if !displayLink.isPaused{
       self.setNeedsDisplay()
     }
+  }
+  
+  var diameter:CGFloat{
+    return graphicalRadius * 2
+  }
+  var origin:CGPoint{
+    return CGPoint(x: center.x - (diameter/2), y: center.y - (diameter/2))
+  }
+  
+  var circleRect:CGRect{
+    let size = CGSize(width: diameter, height: diameter)
+    let rect = CGRect(origin: origin, size: size)
+    let middle = CGPoint(x: rect.midX, y: rect.midY)
+    precondition(middle == self.center)
+    return rect
+  }
+  
+  public func setPaused(_ paused:Bool){
+    
+    let anim = fillAnimation(fillCircle,graphicalRadius,self.center)
+    
+    fillCircle.add(anim, forKey: "fillAnimation")
+    
   }
   
   public func setTimerLabel(str:String){

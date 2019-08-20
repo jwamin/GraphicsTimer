@@ -15,6 +15,8 @@ class TimerViewController: UIViewController {
   var timerView:TimerView!
   var constraints = [NSLayoutConstraint]()
   
+  var tapRecogniser:UITapGestureRecognizer!
+  
   override var preferredStatusBarStyle: UIStatusBarStyle{
     return UIStatusBarStyle.lightContent
   }
@@ -35,6 +37,9 @@ class TimerViewController: UIViewController {
     timerViewModel.startResume()
     //Thread.sleep(until: Date().addingTimeInterval(5))
     
+    tapRecogniser = UITapGestureRecognizer(target: self, action: #selector(handleTap(_:)))
+    tapRecogniser.delegate = self
+    timerView.addGestureRecognizer(tapRecogniser)
     
   }
   
@@ -111,4 +116,27 @@ extension TimerViewController : TimerModelDelegate{
       timerView.updateCircle(decimal: updateFraction)
     }
   }
+}
+
+
+extension TimerViewController : UIGestureRecognizerDelegate{
+  
+  func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
+    return true
+  }
+  
+  @objc func handleTap(_ sender:UITapGestureRecognizer){
+    print("tap handled")
+    
+   let tapInCircleRect = timerView.circleRect.contains(sender.location(in: timerView))
+    
+    if tapInCircleRect{
+      timerViewModel.pause()
+      
+    }
+    
+    timerView.setPaused(timerViewModel.isPaused)
+    
+  }
+  
 }

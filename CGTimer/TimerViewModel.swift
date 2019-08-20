@@ -24,6 +24,10 @@ class TimerViewModel {
     dateFormatter.allowedUnits = [NSCalendar.Unit.minute, NSCalendar.Unit.second]
   }
   
+  var isPaused:Bool{
+    return timerModel.isPaused
+  }
+  
   deinit {
     print("this is the vm being deinitialised")
   }
