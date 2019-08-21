@@ -27,13 +27,22 @@ class CGTimerViewModelTests: XCTestCase {
     }
 
   func testTimerPausedFlag(){
+    
+    
     viewModel.startResume()
-    XCTAssert(viewModel.isPaused == false)
-    XCTAssert(timerModel.isPaused == viewModel.isPaused)
-    viewModel.pause()
-    XCTAssert(viewModel.isPaused == true)
-    viewModel.startResume()
-    XCTAssert(viewModel.isPaused == false)
+    
+    let expections = XCTestExpectation(description: "wait for time")
+    let waiter = XCTWaiter.wait(for: [expections], timeout: 0.1)
+    if waiter == XCTWaiter.Result.timedOut{
+      viewModel.pause()
+      XCTAssert(viewModel.isPaused == true)
+      viewModel.startResume()
+      XCTAssert(viewModel.isPaused == false)
+      XCTAssert(!viewModel.isPaused, "model.isPaused \(viewModel.isPaused)")
+    } else {
+      XCTFail()
+    }
+    
   }
   
   

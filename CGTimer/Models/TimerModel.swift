@@ -30,7 +30,8 @@ class TimerModel: TimerProtocol {
   }
   
   var isPaused:Bool{
-    return pausedAt != nil && !timer!.isValid
+    
+    return pausedAt != nil
   }
   
   public func setDuration(duration:Double){
@@ -39,10 +40,11 @@ class TimerModel: TimerProtocol {
   }
   
   func startResume(){
-    
+    print("beginning of startResume")
     if let _ = pausedAt, let remaining = remaining{
       endDate = pausedAt!.addingTimeInterval(remaining) //
       pausedAt = nil
+      print(pausedAt,"should be nilled out")
     } else {
       endDate = Date().addingTimeInterval(duration)
     }
@@ -50,7 +52,7 @@ class TimerModel: TimerProtocol {
     timer = Timer(timeInterval: 0, repeats: true, block: self.update(_:))
     
     RunLoop.main.add(timer!, forMode: .default)
-    
+    print("end of startResume")
   }
   
   func stopReset(){
@@ -80,6 +82,7 @@ class TimerModel: TimerProtocol {
   /// Update the parent with new data when the tiemr fires
   /// - Parameter timer: timer instance passed in by firing of timer
   private func update(_ timer:Timer)->Void{
+    
     remaining = endDate!.timeIntervalSince(Date())
     
     if remaining! <= 0{

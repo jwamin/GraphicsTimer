@@ -42,10 +42,19 @@ class TimerModelTests: XCTestCase {
   }
   
   func testTimerPauses(){
-    model.pause()
-    XCTAssert(model.isPaused)
     model.startResume()
-    XCTAssert(!model.isPaused, "model.isPaused \(model.isPaused)")
+    let expections = XCTestExpectation(description: "wait for time")
+    let waiter = XCTWaiter.wait(for: [expections], timeout: 0.3)
+    if waiter == XCTWaiter.Result.timedOut{
+      model.pause()
+      XCTAssert(model.isPaused)
+      model.startResume()
+      Thread.sleep(until: Date().advanced(by: 1))
+      XCTAssert(!model.isPaused, "model.isPaused \(model.isPaused)")
+    } else {
+      XCTFail()
+    }
+    
   }
   
   func testTimerDurationSet(){
