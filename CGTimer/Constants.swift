@@ -20,7 +20,7 @@ public struct Constants {
   }
   
   public struct Dimensions{
-    public static let handleDimension:CGFloat = 50
+    public static let handleDimension:CGFloat = 70
   }
   
 }

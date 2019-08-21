@@ -182,7 +182,7 @@ class TimerView : UIView{
       timerCircle.zPosition = 1
       
       let secondPosition = CGPoint(x: -dimension, y: -dimension)
-      var doubleRect = CGRect(origin: secondPosition, size: CGSize(width: dimension*2, height: dimension*2))
+      var doubleRect:CGRect = .zero
       //setup fill circle, for pause animation
       let secontPAth = UIBezierPath(ovalIn: doubleRect)
       fillCircle = CAShapeLayer()

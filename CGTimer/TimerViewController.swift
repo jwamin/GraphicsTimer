@@ -16,6 +16,7 @@ class TimerViewController: UIViewController {
   var constraints = [NSLayoutConstraint]()
   
   var tapRecogniser:UITapGestureRecognizer!
+  var panRecogniser:UIPanGestureRecognizer!
   
   override var preferredStatusBarStyle: UIStatusBarStyle{
     return UIStatusBarStyle.lightContent
@@ -41,6 +42,12 @@ class TimerViewController: UIViewController {
     tapRecogniser.delegate = self
     timerView.addGestureRecognizer(tapRecogniser)
     
+    panRecogniser = UIPanGestureRecognizer(target: self, action: #selector(handlePan(_:)))
+    panRecogniser.minimumNumberOfTouches = 1
+    panRecogniser.maximumNumberOfTouches = 1
+    timerView.addGestureRecognizer(panRecogniser)
+    
+    
   }
   
   func bindConstaints(){
@@ -61,16 +68,16 @@ class TimerViewController: UIViewController {
   }
   
   
-  override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-    
-    if let first = touches.first, let _ = intersects(touch: first.location(in: timerView)) {
-      print("valid began")
-      timerViewModel.stopReset()
-      timerView.displayLink.isPaused = false
-      timerView.clearRawRadius()
-      timerView.toggleFill(false)
-    }
-  }
+//  override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+//
+//    if let first = touches.first, let _ = intersects(touch: first.location(in: timerView)) {
+//      print("valid began")
+//      timerViewModel.stopReset()
+//      timerView.displayLink.isPaused = false
+//      timerView.clearRawRadius()
+//      timerView.toggleFill(false)
+//    }
+//  }
   
   private func intersects(touch:CGPoint)->CGPoint?{
     if self.timerView.currentPosition.contains(touch){
@@ -79,24 +86,24 @@ class TimerViewController: UIViewController {
     return nil
   }
   
-  override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
-    if let first = touches.first, let location = intersects(touch: first.location(in: timerView)) {
-      self.timerView.position = location
-      let fraction = Double(timerView.absoluteRadius / (self.view.frame.width / 2))
-      //print(fraction,location)
-      timerViewModel.setDuration(duration: fraction * TimerModel.timerMax)
-    }
-  }
+//  override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
+//    if let first = touches.first, let location = intersects(touch: first.location(in: timerView)) {
+//      self.timerView.position = location
+//      let fraction = Double(timerView.absoluteRadius / (self.view.frame.width / 2))
+//      //print(fraction,location)
+//      timerViewModel.setDuration(duration: fraction * TimerModel.timerMax)
+//    }
+//  }
   
-  override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
-    timerView.toggleFill(true)
-    if let first = touches.first, let location = intersects(touch: first.location(in: timerView)) {
-      timerView.displayLink.isPaused = false
-      print("valid ended")
-      timerViewModel.startResume()
-    }
-    
-  }
+//  override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+//    timerView.toggleFill(true)
+//    if let first = touches.first, let location = intersects(touch: first.location(in: timerView)) {
+//      timerView.displayLink.isPaused = false
+//      print("valid ended")
+//      timerViewModel.startResume()
+//    }
+//
+//  }
   
   override func viewDidLayoutSubviews() {
     if timerView.position == .zero{
@@ -149,6 +156,41 @@ extension TimerViewController : UIGestureRecognizerDelegate{
     
     
     
+  }
+  
+  @objc
+  func handlePan(_ sender:UIPanGestureRecognizer){
+    switch sender.state {
+    case .began:
+      
+      if let _ = intersects(touch: sender.location(in: timerView)) {
+        print("valid began")
+        timerViewModel.stopReset()
+        timerView.displayLink.isPaused = false
+        timerView.clearRawRadius()
+        timerView.toggleFill(false)
+      }
+      
+    case .changed:
+      if let location = intersects(touch: sender.location(in: timerView)) {
+        
+        self.timerView.position = location
+        let fraction = Double(timerView.absoluteRadius / (self.view.frame.width / 2))
+        //print(fraction,location)
+        timerViewModel.setDuration(duration: fraction * TimerModel.timerMax)
+      }
+    case .ended:
+      
+      //if let location = intersects(touch: sender.location(in: timerView)) {
+        timerView.displayLink.isPaused = false
+        print("valid ended")
+        timerViewModel.startResume()
+        timerView.setPaused(false)
+        timerView.toggleFill(true)
+      //}
+    default:
+      print("nothing")
+    }
   }
   
 }
