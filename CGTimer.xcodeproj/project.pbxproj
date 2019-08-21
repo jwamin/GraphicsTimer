@@ -15,6 +15,9 @@
 		5754E9BC2309EF6B00CA253A /* TimerProtocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5754E9BB2309EF6B00CA253A /* TimerProtocols.swift */; };
 		576280EF23034E9B003E6BF6 /* TimerModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 576280EE23034E9B003E6BF6 /* TimerModel.swift */; };
 		576280F92305973A003E6BF6 /* CGTimerModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 576280F82305973A003E6BF6 /* CGTimerModelTests.swift */; };
+		57692F57230D895100B2C431 /* TimerViewController+GestureRecogniser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57692F56230D895100B2C431 /* TimerViewController+GestureRecogniser.swift */; };
+		57692F59230D89E200B2C431 /* TimerViewController+TimerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57692F58230D89E200B2C431 /* TimerViewController+TimerDelegate.swift */; };
+		57692F5E230D8C3C00B2C431 /* TimerView+Animations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57692F5D230D8C3C00B2C431 /* TimerView+Animations.swift */; };
 		57C104312301F32600B5211D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57C104302301F32600B5211D /* AppDelegate.swift */; };
 		57C104332301F32600B5211D /* TimerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57C104322301F32600B5211D /* TimerViewController.swift */; };
 		57C104382301F32900B5211D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 57C104372301F32900B5211D /* Assets.xcassets */; };
@@ -43,6 +46,9 @@
 		576280F62305973A003E6BF6 /* CGTimerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CGTimerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		576280F82305973A003E6BF6 /* CGTimerModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CGTimerModelTests.swift; sourceTree = "<group>"; };
 		576280FA2305973A003E6BF6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		57692F56230D895100B2C431 /* TimerViewController+GestureRecogniser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TimerViewController+GestureRecogniser.swift"; sourceTree = "<group>"; };
+		57692F58230D89E200B2C431 /* TimerViewController+TimerDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TimerViewController+TimerDelegate.swift"; sourceTree = "<group>"; };
+		57692F5D230D8C3C00B2C431 /* TimerView+Animations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TimerView+Animations.swift"; sourceTree = "<group>"; };
 		57C1042D2301F32600B5211D /* CGTimer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CGTimer.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		57C104302301F32600B5211D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		57C104322301F32600B5211D /* TimerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerViewController.swift; sourceTree = "<group>"; };
@@ -79,6 +85,34 @@
 			path = CGTimerTests;
 			sourceTree = "<group>";
 		};
+		57692F5A230D8B8300B2C431 /* ViewController */ = {
+			isa = PBXGroup;
+			children = (
+				57C104322301F32600B5211D /* TimerViewController.swift */,
+				57692F58230D89E200B2C431 /* TimerViewController+TimerDelegate.swift */,
+				57692F56230D895100B2C431 /* TimerViewController+GestureRecogniser.swift */,
+			);
+			path = ViewController;
+			sourceTree = "<group>";
+		};
+		57692F5B230D8BB700B2C431 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				576280EE23034E9B003E6BF6 /* TimerModel.swift */,
+				5754E9B72309CA3600CA253A /* TimerViewModel.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		57692F5C230D8BCF00B2C431 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				570B7D9823020A410008741C /* TimerView.swift */,
+				57692F5D230D8C3C00B2C431 /* TimerView+Animations.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
 		57C104242301F32600B5211D = {
 			isa = PBXGroup;
 			children = (
@@ -103,12 +137,11 @@
 			children = (
 				57C104302301F32600B5211D /* AppDelegate.swift */,
 				570B7D9A23020A710008741C /* FeatureBuilder.swift */,
-				57C104322301F32600B5211D /* TimerViewController.swift */,
-				576280EE23034E9B003E6BF6 /* TimerModel.swift */,
-				5754E9B72309CA3600CA253A /* TimerViewModel.swift */,
 				570B7D9C23020C9E0008741C /* Constants.swift */,
-				570B7D9823020A410008741C /* TimerView.swift */,
 				5754E9BB2309EF6B00CA253A /* TimerProtocols.swift */,
+				57692F5B230D8BB700B2C431 /* Models */,
+				57692F5A230D8B8300B2C431 /* ViewController */,
+				57692F5C230D8BCF00B2C431 /* Views */,
 				57C104372301F32900B5211D /* Assets.xcassets */,
 				57C104392301F32900B5211D /* LaunchScreen.storyboard */,
 				57C1043C2301F32900B5211D /* Info.plist */,
@@ -225,12 +258,15 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				57692F5E230D8C3C00B2C431 /* TimerView+Animations.swift in Sources */,
 				5754E9B82309CA3600CA253A /* TimerViewModel.swift in Sources */,
 				570B7D9D23020C9E0008741C /* Constants.swift in Sources */,
 				570B7D9923020A410008741C /* TimerView.swift in Sources */,
 				57C104332301F32600B5211D /* TimerViewController.swift in Sources */,
 				576280EF23034E9B003E6BF6 /* TimerModel.swift in Sources */,
+				57692F59230D89E200B2C431 /* TimerViewController+TimerDelegate.swift in Sources */,
 				5754E9BC2309EF6B00CA253A /* TimerProtocols.swift in Sources */,
+				57692F57230D895100B2C431 /* TimerViewController+GestureRecogniser.swift in Sources */,
 				570B7D9B23020A710008741C /* FeatureBuilder.swift in Sources */,
 				57C104312301F32600B5211D /* AppDelegate.swift in Sources */,
 			);

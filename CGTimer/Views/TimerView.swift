@@ -14,13 +14,10 @@ class TimerView : UIView{
   var timerCircle:CAShapeLayer!
   var fillCircle:CAShapeLayer!
   var fill = true
-  
   var displayLink:CADisplayLink!
   
-
+  //MARK: Property Observers
   
-  
-  //MARK: Computed Properties
   var position:CGPoint = .zero{
     didSet{
       if (updateRadiusRaw == nil){
@@ -29,6 +26,8 @@ class TimerView : UIView{
     }
   }
   
+  //MARK: Computed Properties
+
   
   private var updateRadiusRaw:CGFloat?
   
@@ -44,7 +43,7 @@ class TimerView : UIView{
     return min(radius,maxWidth)
   }
   
-  //radius for drawing
+  //radius for drawing, subtracts half the line width so ensures the entire circle fits on screen
   var graphicalRadius:CGFloat{
     
     var working:CGFloat = 0
@@ -60,9 +59,27 @@ class TimerView : UIView{
     
   }
   
+  var diameter:CGFloat{
+    
+    return graphicalRadius * 2
+  }
+  
+  var origin:CGPoint{
+    
+    return CGPoint(x: center.x - (diameter/2), y: center.y - (diameter/2))
+  }
+  
   var currentPosition:CGRect{
     
     return self.convert(timerCircle.frame, to: self)
+  }
+  
+  var circleRect:CGRect{
+    let size = CGSize(width: diameter, height: diameter)
+    let rect = CGRect(origin: origin, size: size)
+    let middle = CGPoint(x: rect.midX, y: rect.midY)
+    precondition(middle == self.center)
+    return rect
   }
   
   //MARK: Subviews
@@ -75,6 +92,8 @@ class TimerView : UIView{
   override init(frame: CGRect) {
     
     super.init(frame: frame)
+    
+    //setup displaylink
     displayLink = CADisplayLink(target: self, selector: #selector(displayLinkUpdate))
     displayLink.add(to: RunLoop.main, forMode: .default)
 
@@ -91,21 +110,6 @@ class TimerView : UIView{
     if !displayLink.isPaused{
       self.setNeedsDisplay()
     }
-  }
-  
-  var diameter:CGFloat{
-    return graphicalRadius * 2
-  }
-  var origin:CGPoint{
-    return CGPoint(x: center.x - (diameter/2), y: center.y - (diameter/2))
-  }
-  
-  var circleRect:CGRect{
-    let size = CGSize(width: diameter, height: diameter)
-    let rect = CGRect(origin: origin, size: size)
-    let middle = CGPoint(x: rect.midX, y: rect.midY)
-    precondition(middle == self.center)
-    return rect
   }
   
   public func setPaused(_ paused:Bool){
@@ -168,7 +172,6 @@ class TimerView : UIView{
       self.layer.addSublayer(timerCircle)
       
       let dimension = Constants.Dimensions.handleDimension
-      let position = CGPoint(x: dimension / 2, y: dimension / 2)
       let rect = CGRect(origin: .zero, size: CGSize(width: dimension, height: dimension))
       let path = UIBezierPath(ovalIn: rect)
       timerCircle.bounds = rect
@@ -181,10 +184,8 @@ class TimerView : UIView{
       timerCircle.path = path.cgPath
       timerCircle.zPosition = 1
       
-      let secondPosition = CGPoint(x: -dimension, y: -dimension)
-      var doubleRect:CGRect = .zero
       //setup fill circle, for pause animation
-      let secontPAth = UIBezierPath(ovalIn: doubleRect)
+      let secontPath = UIBezierPath(ovalIn: .zero)
       fillCircle = CAShapeLayer()
       self.layer.addSublayer(fillCircle)
       fillCircle.borderWidth = 1.0
@@ -194,7 +195,7 @@ class TimerView : UIView{
       fillCircle.fillColor = Constants.Colors.foreground.cgColor
       fillCircle.position = self.center
       //fillCircle.backgroundColor = UIColor.white.cgColor
-      fillCircle.path = secontPAth.cgPath
+      fillCircle.path = secontPath.cgPath
       fillCircle.zPosition = 0
       
     }
@@ -207,17 +208,13 @@ class TimerView : UIView{
     timerCircle.fillColor = (fill) ? UIColor.white.cgColor : UIColor.clear.cgColor
   }
   
+  //MARK: UIView update / lifecycle
   
-  override func draw(_ rect: CGRect) {
-    super.draw(rect)
+  override func layoutSubviews() {
     
-    let context = UIGraphicsGetCurrentContext()
-    context?.move(to: position)
-    context?.setStrokeColor(UIColor.blue.cgColor)
-    context?.setLineWidth(Constants.Widths.main)
-    context?.beginPath()
-    context?.addArc(center: self.center, radius: graphicalRadius, startAngle: 0, endAngle: 2 * .pi, clockwise: true)
-    context?.strokePath()
+    setupShapeLayers()
+    setupLabel()
+    super.layoutSubviews()
     
   }
   
@@ -238,33 +235,20 @@ class TimerView : UIView{
     super.updateConstraints()
   }
   
-  override func layoutSubviews() {
+  //draw method
+  override func draw(_ rect: CGRect) {
+    super.draw(rect)
     
-    setupShapeLayers()
-    setupLabel()
-    super.layoutSubviews()
+    //draws the main circle, CADisplayLink calls setNeedsDisplay which calls draw method
+    let context = UIGraphicsGetCurrentContext()
+    context?.move(to: position)
+    context?.setStrokeColor(UIColor.blue.cgColor)
+    context?.setLineWidth(Constants.Widths.main)
+    context?.beginPath()
+    context?.addArc(center: self.center, radius: graphicalRadius, startAngle: 0, endAngle: 2 * .pi, clockwise: true)
+    context?.strokePath()
+    
   }
-  
-}
 
-//MARK: Animations
-extension TimerView {
-  
-  func makeFillAnimation(paused:Bool)->(CGPath,CAAnimation){
-    
-      let animation = CABasicAnimation(keyPath: "path")
-      animation.fromValue = fillCircle.path
-      let center = CGPoint(x: -diameter/2, y: -diameter/2)
-      let rect = (paused) ? CGRect(origin: center, size: CGSize(width: diameter, height: diameter)) : .zero
-      let bpath = UIBezierPath(ovalIn: rect)
-      
-      animation.toValue = bpath.cgPath
-      animation.duration = 1.5
-      animation.isRemovedOnCompletion = false
-      animation.fillMode = .forwards
-      
-    return (bpath.cgPath,animation)
-    
-  }
   
 }
